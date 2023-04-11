@@ -40,11 +40,17 @@ public class MoveState : IState
         _playerTransform.position += position;
 
 
-        //Set the player rotation based on the look transform
+        //var quat = Quaternion.LookRotation(_input.GetMoveInput().normalized);
+        //_playerTransform.rotation = Quaternion.RotateTowards(_playerTransform.rotation, quat, 0);
+
+        ////Set the player rotation based on the look transform
+        
         _playerTransform.rotation = Quaternion.Euler(0, _followTransform.rotation.eulerAngles.y, 0);
 
-        //reset the y rotation of the look transform
+        ////reset the y rotation of the look transform
         _followTransform.localEulerAngles = new Vector3(_followTransform.localEulerAngles.x, 0, 0);
+
+
 
     }
 }
