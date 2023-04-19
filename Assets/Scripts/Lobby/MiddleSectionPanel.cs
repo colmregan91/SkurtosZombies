@@ -6,36 +6,36 @@ using UnityEngine.UI;
 public class MiddleSectionPanel : LobbyPanelBase
 {
     [Header("MiddleSectionPanel Vars")] 
-    [SerializeField] private Button joinRandomRoomBtn;
-    [SerializeField] private Button joinRoomByArgBtn;
-    [SerializeField] private Button createRoomBtn;
+    [SerializeField] private Button _joinRandomRoomBtn;
+    [SerializeField] private Button _joinRoomByArgBtn;
+    [SerializeField] private Button _createRoomBtn;
 
-    [SerializeField] private TMP_InputField joinRoomByArgInputField;
-    [SerializeField] private TMP_InputField createRoomInputField;
-    private NetworkRunnerController networkRunnerController;
+    [SerializeField] private TMP_InputField _joinRoomByArgInputField;
+    [SerializeField] private TMP_InputField _createRoomInputField;
+    private NetworkRunnerController _networkRunnerController;
     
     public override void InitPanel(LobbyUIManager uiManager)
     {
         base.InitPanel(uiManager);
 
-        networkRunnerController = GlobalManagers.Instance.NetworkRunnerController;
-        joinRandomRoomBtn.onClick.AddListener(JoinRandomRoom);
-        joinRoomByArgBtn.onClick.AddListener(() => CreateRoom(GameMode.Client, joinRoomByArgInputField.text));
-        createRoomBtn.onClick.AddListener(() => CreateRoom(GameMode.Host, createRoomInputField.text));
+        _networkRunnerController = GlobalManagers.Instance.NetworkRunnerController;
+        _joinRandomRoomBtn.onClick.AddListener(joinRandomRoom);
+        _joinRoomByArgBtn.onClick.AddListener(() => createRoom(GameMode.Client, _joinRoomByArgInputField.text));
+        _createRoomBtn.onClick.AddListener(() => createRoom(GameMode.Host, _createRoomInputField.text));
     }
 
-    private void CreateRoom(GameMode mode, string field)
+    private void createRoom(GameMode mode, string field)
     {
         if (field.Length >= 2)
         {
             Debug.Log($"------------{mode}------------");
-            networkRunnerController.StartGame(mode, field);
+            _networkRunnerController.StartGame(mode, field);
         }
     }
 
-    private void JoinRandomRoom()
+    private void joinRandomRoom()
     {
         Debug.Log($"------------JoinRandomRoom!------------");
-        networkRunnerController.StartGame(GameMode.AutoHostOrClient, string.Empty);
+        _networkRunnerController.StartGame(GameMode.AutoHostOrClient, string.Empty);
     }
 }

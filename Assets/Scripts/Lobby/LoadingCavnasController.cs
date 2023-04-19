@@ -3,35 +3,35 @@ using UnityEngine.UI;
 
 public class LoadingCavnasController : MonoBehaviour
 {
-    [SerializeField] private Animator animator;
-    [SerializeField] private Button cancelBtn;
-    private NetworkRunnerController networkRunnerController;
+    [SerializeField] private Animator _animator;
+    [SerializeField] private Button _cancelBtn;
+    private NetworkRunnerController _networkRunnerController;
     
     private void Start()
     {
-        networkRunnerController = GlobalManagers.Instance.NetworkRunnerController;
-        networkRunnerController.OnStartedRunnerConnection += OnStartedRunnerConnection;
-        networkRunnerController.OnPlayerJoinedSuccessfully += OnPlayerJoinedSuccessfully;
+        _networkRunnerController = GlobalManagers.Instance.NetworkRunnerController;
+        _networkRunnerController.OnStartedRunnerConnection += onStartedRunnerConnection;
+        _networkRunnerController.OnPlayerJoinedSuccessfully += onPlayerJoinedSuccessfully;
         
-        cancelBtn.onClick.AddListener(networkRunnerController.ShutDownRunner);
+        _cancelBtn.onClick.AddListener(_networkRunnerController.ShutDownRunner);
         this.gameObject.SetActive(false);
     }
-    private void OnStartedRunnerConnection()
+    private void onStartedRunnerConnection()
     {
         this.gameObject.SetActive(true);
         const string CLIP_NAME = "In";
-        StartCoroutine(Utils.PlayAnimAndSetStateWhenFinished(gameObject, animator, CLIP_NAME));
+        StartCoroutine(Utils.PlayAnimAndSetStateWhenFinished(gameObject, _animator, CLIP_NAME));
     }
     
-    private void OnPlayerJoinedSuccessfully()
+    private void onPlayerJoinedSuccessfully()
     {
         const string CLIP_NAME = "Out";
-        StartCoroutine(Utils.PlayAnimAndSetStateWhenFinished(gameObject, animator, CLIP_NAME, false));
+        StartCoroutine(Utils.PlayAnimAndSetStateWhenFinished(gameObject, _animator, CLIP_NAME, false));
     }
 
     private void OnDestroy()
     {
-        networkRunnerController.OnStartedRunnerConnection -= OnStartedRunnerConnection;
-        networkRunnerController.OnPlayerJoinedSuccessfully -= OnPlayerJoinedSuccessfully;
+        _networkRunnerController.OnStartedRunnerConnection -= onStartedRunnerConnection;
+        _networkRunnerController.OnPlayerJoinedSuccessfully -= onPlayerJoinedSuccessfully;
     }
 }

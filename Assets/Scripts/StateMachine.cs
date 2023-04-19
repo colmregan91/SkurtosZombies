@@ -31,7 +31,7 @@ public class StateMachine
 
     public void Init(IState startState)
     {
-        TransitionsToAnyState = Transitions.Where(T => T._from == null).ToList();
+        TransitionsToAnyState = Transitions.Where(T => T.From == null).ToList();
         SetState(startState);
     }
 
@@ -42,7 +42,7 @@ public class StateMachine
         CurrentState?.OnExit();
         Debug.Log($"changing state from {CurrentState} to {newState}");
         CurrentState = newState;
-        TransitionsFromCurrentState = Transitions.Where(T => T._from == CurrentState).ToList(); // todo : set up in start
+        TransitionsFromCurrentState = Transitions.Where(T => T.From == CurrentState).ToList(); // todo : set up in start
         Debug.Log(Transitions.Count);
         Debug.Log($"checking {TransitionsFromCurrentState.Count} transitions from {CurrentState}");
 
@@ -51,11 +51,11 @@ public class StateMachine
         // on state changed
     }
 
-    public void Tick()
+    public void Tick(float DeltaTime)
     {
         if (!CheckForTransition()) // todo : research how to set up via event subscription rather than checking conditions every frame
         {
-            CurrentState.OnUpdate();
+            CurrentState.OnUpdate(DeltaTime);
         }
     }
 
@@ -63,18 +63,18 @@ public class StateMachine
     {
         foreach (var cond in TransitionsToAnyState)
         {
-            if (cond._condition())
+            if (cond.Condition())
             {
-                SetState(cond._to);
+                SetState(cond.To);
                 return true;
             }
         }
 
         foreach (var cond in TransitionsFromCurrentState)
         {
-            if (cond._condition())
+            if (cond.Condition())
             {
-                SetState(cond._to);
+                SetState(cond.To);
                 return true;
             }
         }

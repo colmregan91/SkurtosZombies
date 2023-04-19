@@ -6,9 +6,8 @@ using UnityEngine.InputSystem;
 
 
 
-public class PlayerMovementInputController : MonoBehaviour
+public class PlayerMovementInputController : MonoBehaviour // script will be deleted 
 {
-    private NavMeshAgent _agent;
     public Vector2 _move;
     public Vector2 _look;
     public float aimValue;
@@ -23,10 +22,6 @@ public class PlayerMovementInputController : MonoBehaviour
     public float    speed = 1f;
     public Camera   camera;
 
-    private void Awake()
-    {
-        _agent = GetComponent<NavMeshAgent>();
-    }
 
     public void OnMove(InputValue value)
     {

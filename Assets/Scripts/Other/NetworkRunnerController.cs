@@ -9,43 +9,44 @@ public class NetworkRunnerController : MonoBehaviour, INetworkRunnerCallbacks
 {
     public event Action OnStartedRunnerConnection;
     public event Action OnPlayerJoinedSuccessfully;
-    [SerializeField] private NetworkRunner networkRunnerPrefab;
+    [SerializeField] private NetworkRunner _networkRunnerPrefab;
 
-    private NetworkRunner networkRunnerInstance;
+    private NetworkRunner _networkRunnerInstance;
 
+     
     public void ShutDownRunner()
     {
-        networkRunnerInstance.Shutdown();
+        _networkRunnerInstance.Shutdown();
     }
     
     public async void StartGame(GameMode mode, string roomName)
     {
         OnStartedRunnerConnection?.Invoke();
 
-        if (networkRunnerInstance == null)
+        if (_networkRunnerInstance == null)
         {
-            networkRunnerInstance = Instantiate(networkRunnerPrefab);
+            _networkRunnerInstance = Instantiate(_networkRunnerPrefab);
         }
         
         //Register so we will get the callbacks as well
-        networkRunnerInstance.AddCallbacks(this);
+        _networkRunnerInstance.AddCallbacks(this);
 
         //ProvideInput means that that player is recording and sending inputs to the server.
-        networkRunnerInstance.ProvideInput = true;
+        _networkRunnerInstance.ProvideInput = true;
 
-       var startGameArgs = new StartGameArgs()
+        StartGameArgs startGameArgs = new StartGameArgs()
        {
            GameMode = mode,
            SessionName = roomName,
            PlayerCount = 4,
-           SceneManager = networkRunnerInstance.GetComponent<INetworkSceneManager>()
+           SceneManager = _networkRunnerInstance.GetComponent<INetworkSceneManager>()
        };
 
-      var result = await networkRunnerInstance.StartGame(startGameArgs);
+      StartGameResult result = await _networkRunnerInstance.StartGame(startGameArgs);
       if (result.Ok)
       {
           const string SCENE_NAME = "GameScene";
-          networkRunnerInstance.SetActiveScene(SCENE_NAME);
+          _networkRunnerInstance.SetActiveScene(SCENE_NAME);
       }
       else
       {
@@ -66,7 +67,7 @@ public class NetworkRunnerController : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        Debug.Log("OnInput");
+       
     }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)

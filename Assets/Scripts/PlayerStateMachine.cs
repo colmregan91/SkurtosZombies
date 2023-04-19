@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,27 +10,24 @@ public class PlayerStateMachine : MonoBehaviour
     private MoveState _moveState;
     private IdleState _idleState;
     private AnimationBlending _animBlending;
-    private InputController _input;
+    private IHandleinput _input;
 
     [SerializeField]private Transform FollowTransform;
-    private Transform PlayerTransform;
+    private Transform _playerTransform;
 
 
-    public static Action<IState> OnPlayerStateChanged;
+    public Action<IState> OnPlayerStateChanged;
 
-    
-    private void Awake()
+
+    public void Init()
     {
-        _input = GetComponent<InputController>();
+        _input = GetComponent<IHandleinput>();
         _animBlending = GetComponentInChildren<AnimationBlending>();
-        PlayerTransform = transform;
+        _playerTransform = transform;
         _playerStateMachine = new StateMachine();
-        _moveState = new MoveState(FollowTransform, PlayerTransform, _input);
-        _idleState = new IdleState(FollowTransform, _input);
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
+        _moveState = new MoveState(FollowTransform, _playerTransform, _input);
+        _idleState = new IdleState();
+
         _playerStateMachine.OnStateChanged += (state) => OnPlayerStateChanged?.Invoke(state);
 
         _playerStateMachine.AddTransition(_moveState, _idleState, IsMoving);
@@ -38,10 +36,11 @@ public class PlayerStateMachine : MonoBehaviour
         _playerStateMachine.Init(_idleState);
     }
 
+
     // Update is called once per frame
-    void Update()
+   public void UpdateStateMachine(float DeltaTime)
     {
-        _playerStateMachine.Tick();
+        _playerStateMachine.Tick(DeltaTime);
     }
 
     public bool IsMoving()

@@ -10,7 +10,7 @@ using UnityEngine;
 [ScriptHelp(BackColor = EditorHeaderBackColor.Steel)]
 public class InputBehaviourPrototype : Fusion.Behaviour, INetworkRunnerCallbacks {
 
-  public void OnInput(NetworkRunner runner, NetworkInput input) {
+  public void OnLocalInput(NetworkRunner runner, NetworkInput input) {
     var frameworkInput = new NetworkInputPrototype();
 
     if (Input.GetKey(KeyCode.W)) {
@@ -91,6 +91,10 @@ public class InputBehaviourPrototype : Fusion.Behaviour, INetworkRunnerCallbacks
   public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) {
 
   }
+
+    public void OnInput(NetworkRunner runner, NetworkInput input)
+    {
+    }
 }
 
 /// <summary>

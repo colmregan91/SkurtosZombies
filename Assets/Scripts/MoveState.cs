@@ -3,22 +3,22 @@ using UnityEngine;
 
 public class MoveState : IState
 {
-    private Transform m_followTransform;
-    private Transform m_playerTransform;
-    private InputController m_input;
-    private float m_speed = 1f;
+    private Transform _followTransform;
+    private Transform _playerTransform;
+    private IHandleinput _input;
+    private float _speed = 2f;
+    private Vector2 _moveInputVector;
 
-    // Comment out unused method
-    // public Tuple<float,float> GetBlendValues()
-    // {
-    //     return new Tuple<float, float>(_currentXblendValue, _currentYblendValue);
-    // }
+    private Vector3 _nextPosition;
 
-    public MoveState(Transform followTransform, Transform playerTransform, InputController input)
+
+
+    public MoveState(Transform followTransform, Transform playerTransform, IHandleinput input)
     {
-        m_followTransform = followTransform;
-        m_playerTransform = playerTransform;
-        m_input = input;
+        _followTransform = followTransform;
+        _playerTransform = playerTransform;
+        _input = input;
+
     }
 
     public void OnEnter()
@@ -31,25 +31,25 @@ public class MoveState : IState
         Debug.Log("Move state exited");
     }
 
-    private void MovePlayer()
+    private void MovePlayer(float DeltaTime)
     {
-        float moveSpeed = m_speed / 100f;
-        Vector3 position = (m_playerTransform.forward * m_input.GetMoveInput().y * moveSpeed) + (m_playerTransform.right * m_input.GetMoveInput().x * moveSpeed);
-        m_playerTransform.position += position;
+        _moveInputVector = _input.GetMoveInput();
+        _nextPosition = ((_playerTransform.forward * _moveInputVector.y * _speed) + (_playerTransform.right * _moveInputVector.x * _speed)) *  DeltaTime;
+        _playerTransform.position += _nextPosition;
     }
 
-    private void RotatePlayer()
+    private void RotatePlayer()// follow transform is already moved using delta time in CameraRotation, so it is not needed here
     {
-        // Set the player rotation based on the look transform
-        m_playerTransform.rotation = Quaternion.Euler(0, m_followTransform.rotation.eulerAngles.y, 0);
+   
+        _playerTransform.rotation = Quaternion.Euler(0, _followTransform.rotation.eulerAngles.y, 0); 
 
         // Reset the y rotation of the look transform
-        m_followTransform.localEulerAngles = new Vector3(m_followTransform.localEulerAngles.x, 0, 0);
+        _followTransform.localEulerAngles = new Vector3(_followTransform.localEulerAngles.x, 0, 0); // todo: try clear this garbage
     }
 
-    public void OnUpdate()
+    public void OnUpdate(float DeltaTime)
     {
-        MovePlayer();
+        MovePlayer(DeltaTime);
         RotatePlayer();
     }
 }

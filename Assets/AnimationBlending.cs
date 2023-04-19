@@ -1,99 +1,95 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
+using System;
 
-public class AnimationBlending : MonoBehaviour
+public class AnimationBlending : NetworkBehaviour
 {
 
-    private InputController _input;
-    private Animator _anim;
+    private IHandleinput _input;
+    public Animator _anim;
 
-    [SerializeField]private float _acceleration = 1f;
+    [SerializeField] private float _acceleration = 1f;
     [SerializeField] private float _deccceleration = 1f;
     private Vector3 _inputVector;
-    public float currentXblendValue { get; private set; }
-    public float currentYblendValue { get; private set; }
+
+    public float CurrentXblendValue { get; private set; }
+    public float CurrentYblendValue { get; private set; }
+
+
+    private PlayerStateMachine _PlayerStateMachine;
 
     void ONPlayerStateChanged(IState state)
     {
         if (state is IdleState)
         {
-            _anim.SetBool(AnimStringUtils.moveHash, false);
+            _anim.SetBool(AnimStringUtils.s_MoveHash, false);
         }
         if (state is MoveState)
         {
-            _anim.SetBool(AnimStringUtils.moveHash, true);
+            _anim.SetBool(AnimStringUtils.s_MoveHash, true);
         }
 
     }
-    private void Awake()
+    public void Init()
     {
-        _input = GetComponentInParent<InputController>();
+        _input = GetComponentInParent<IHandleinput>();
         _anim = GetComponent<Animator>();
-    }
+        _PlayerStateMachine = GetComponentInParent<PlayerStateMachine>();
 
-    private void Start()
-    {
-        PlayerStateMachine.OnPlayerStateChanged += ONPlayerStateChanged;
+        _PlayerStateMachine.OnPlayerStateChanged += ONPlayerStateChanged;
     }
 
     private void OnDisable()
     {
-        PlayerStateMachine.OnPlayerStateChanged -= ONPlayerStateChanged;
+        _PlayerStateMachine.OnPlayerStateChanged -= ONPlayerStateChanged;
     }
 
     // Update is called once per frame
-    void Update()
+    public void UpdateAnimBlending(float DeltaTime)
     {
 
         _inputVector = _input.GetMoveInput();
-        
+
         if (_inputVector.x > 0.5f) // going right
         {
-            currentXblendValue += Time.deltaTime * _acceleration;
+            CurrentXblendValue += DeltaTime * _acceleration;
         }
         if (_inputVector.x < -0.5f) // going left
         {
-            currentXblendValue -= Time.deltaTime * _acceleration;
+            CurrentXblendValue -= DeltaTime * _acceleration;
         }
 
 
 
         if (_inputVector.y > 0.5f) // going forward
         {
-            currentYblendValue += Time.deltaTime * _acceleration;
+            CurrentYblendValue += DeltaTime * _acceleration;
         }
 
         if (_inputVector.y < -0.5f) //going back
         {
-            currentYblendValue -= Time.deltaTime * _acceleration;
+            CurrentYblendValue -= DeltaTime * _acceleration;
         }
 
-        if (_inputVector.y == 0f) 
+        if (_inputVector.y == 0f)
         {
-            currentYblendValue = Mathf.Lerp(currentYblendValue, 0, Time.deltaTime * _deccceleration); //todo: Lerp this properly
+            CurrentYblendValue = Mathf.Lerp(CurrentYblendValue, 0, DeltaTime * _deccceleration); //todo: Lerp this properly
         }
 
         if (_inputVector.x == 0f)
         {
-            currentXblendValue = Mathf.Lerp(currentXblendValue, 0, Time.deltaTime * _deccceleration);//todo: Lerp this properly
+            CurrentXblendValue = Mathf.Lerp(CurrentXblendValue, 0, DeltaTime * _deccceleration);//todo: Lerp this properly
         }
 
 
-        currentXblendValue = Mathf.Clamp(currentXblendValue, -1f, 1f);
-        currentYblendValue = Mathf.Clamp(currentYblendValue, -1f, 1f);
+        CurrentXblendValue = Mathf.Clamp(CurrentXblendValue, -1f, 1f);
+        CurrentYblendValue = Mathf.Clamp(CurrentYblendValue, -1f, 1f);
 
-        _anim.SetFloat(AnimStringUtils.blendXHash, currentXblendValue);
-        _anim.SetFloat(AnimStringUtils.blendYHash, currentYblendValue);
+        _anim.SetFloat(AnimStringUtils.s_BlendXHash, CurrentXblendValue);
+        _anim.SetFloat(AnimStringUtils.s_BlendYHash, CurrentYblendValue);
 
-        //if (Mathf.Abs (currentYblendValue) > 0.1f && Mathf.Abs(currentXblendValue) > 0.1f)
-        //{
-        //    _anim.SetBool(AnimStringUtils.moveHash, false);
-        //}
-        //else
-        //{
-        //    _anim.SetBool(AnimStringUtils.moveHash, true);
-        //}
- 
+
     }
 }

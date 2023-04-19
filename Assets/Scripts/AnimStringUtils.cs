@@ -2,9 +2,9 @@
 
 public class AnimStringUtils
 {
-    public static int moveHash = Animator.StringToHash("isMoving");
-    public static int blendYHash = Animator.StringToHash("BlendY");
-    public static int blendXHash = Animator.StringToHash("BlendX");
+    public static int s_MoveHash = Animator.StringToHash("isMoving");
+    public static int s_BlendYHash = Animator.StringToHash("BlendY");
+    public static int s_BlendXHash = Animator.StringToHash("BlendX");
 
 }
 

@@ -4,30 +4,25 @@ using UnityEngine;
 
 public class CameraRotation : MonoBehaviour
 {
-    [HeaderAttribute("PUBLIC")]
-    public float rotationPower = 0.1f;
 
-    [HeaderAttribute("PRIVATE")]
+    private float _rotationPower = 5f;
+
     private Transform _followTransform;
-    private InputController _input;
+    private IHandleinput _input;
 
-    private void Awake()
+    public void Init()
     {
-        _input = GetComponentInParent<InputController>(); 
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
+        _input = GetComponentInParent<IHandleinput>();
         _followTransform = transform;
     }
 
-    // Update is called once per frame
-    void LateUpdate()
-    {
-        _followTransform.rotation *= Quaternion.AngleAxis(_input.GetLookInput().x * rotationPower, Vector3.up);
 
-        _followTransform.rotation *= Quaternion.AngleAxis(_input.GetLookInput().y * rotationPower, Vector3.right);
+    // Update is called once per frame
+    public void UpdateFollowCam(float DeltaTime)
+    {
+        _followTransform.rotation *= Quaternion.AngleAxis(_input.GetLookInput().x * _rotationPower * DeltaTime, Vector3.up);
+
+        _followTransform.rotation *= Quaternion.AngleAxis(_input.GetLookInput().y * _rotationPower * DeltaTime, Vector3.right);
 
         var angles = _followTransform.localEulerAngles;
         angles.z = 0;

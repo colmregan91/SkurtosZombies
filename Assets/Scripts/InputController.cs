@@ -1,10 +1,15 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputController : MonoBehaviour
+public class InputController : MonoBehaviour, IHandleinput
 {
+    [SerializeField] private Transform _camTransform;
+    [SerializeField] private PlayerStateMachine _playerStateMachine;
+    [SerializeField] private CameraRotation _camRotation;
+    [SerializeField] private AnimationBlending _animBlending;
 
     private InputAsset _defaultPlayersActions;
     private InputAction _moveAction;
@@ -25,6 +30,8 @@ public class InputController : MonoBehaviour
     private void Awake()
     {
         _defaultPlayersActions = new InputAsset();
+
+        _camTransform.SetParent(null);
     }
 
     private void OnEnable()
@@ -34,6 +41,20 @@ public class InputController : MonoBehaviour
 
         _lookAction = _defaultPlayersActions.Player.Look;
         _lookAction.Enable();
+    }
+
+    private void Start()
+    {
+        _camRotation.Init();
+        _playerStateMachine.Init();
+        _animBlending.Init();
+    }
+
+    private void Update()
+    {
+        _playerStateMachine.UpdateStateMachine(Time.deltaTime);
+        _camRotation.UpdateFollowCam(Time.deltaTime);
+        _animBlending.UpdateAnimBlending(Time.deltaTime);
     }
 
     private void OnDisable()

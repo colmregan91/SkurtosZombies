@@ -2,14 +2,14 @@ using System;
 
 public class StateTransition
 {
-    public IState _to;
-    public IState _from;
-    public Func<bool> _condition;
+    public IState To;
+    public IState From;
+    public Func<bool> Condition;
 
     public StateTransition(IState to, IState from, Func<bool> condition)
     {
-        _to = to;
-        _from = from;
-        _condition = condition;
+        To = to;
+        From = from;
+        Condition = condition;
     }
 }
