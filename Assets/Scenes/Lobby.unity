@@ -302,7 +302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f833f0d57622ac94cb84a9211d414d3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkRunnerPrefab: {fileID: 6172663798600707802, guid: f7cabc2a27ee37a4c8b97861e45694a9, type: 3}
+  _networkRunnerPrefab: {fileID: 6172663798600707802, guid: f7cabc2a27ee37a4c8b97861e45694a9, type: 3}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -651,8 +651,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e4e0b1d0d5a21941b83cefde29c57f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadingCanvasControllerPrefab: {fileID: 4243804417468045596, guid: 4c5ed6d282bd24f429ff463afb406c14, type: 3}
-  lobbyPanels:
+  _loadingCanvasControllerPrefab: {fileID: 4243804417468045596, guid: 4c5ed6d282bd24f429ff463afb406c14, type: 3}
+  _lobbyPanels:
   - {fileID: 3481383399912595500}
   - {fileID: 3481383399001504112}
 --- !u!4 &1985599909
@@ -714,7 +714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbb2ae6d2337c9745896137755a46a86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parentObj: {fileID: 1401064456}
+  _parentObj: {fileID: 1401064456}
   <NetworkRunnerController>k__BackingField: {fileID: 270513123}
 --- !u!223 &3481383398657586032
 Canvas:
@@ -1121,12 +1121,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <PanelType>k__BackingField: 2
-  panelAnimator: {fileID: 3481383398777808005}
-  joinRandomRoomBtn: {fileID: 3481383399773131345}
-  joinRoomByArgBtn: {fileID: 3481383400089737528}
-  createRoomBtn: {fileID: 3481383400432092179}
-  joinRoomByArgInputField: {fileID: 3481383400084828651}
-  createRoomInputField: {fileID: 3481383399192255040}
+  _panelAnimator: {fileID: 3481383398777808005}
+  _joinRandomRoomBtn: {fileID: 3481383399773131345}
+  _joinRoomByArgBtn: {fileID: 3481383400089737528}
+  _createRoomBtn: {fileID: 3481383400432092179}
+  _joinRoomByArgInputField: {fileID: 3481383400084828651}
+  _createRoomInputField: {fileID: 3481383399192255040}
 --- !u!114 &3481383399023228763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2746,7 +2746,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <PanelType>k__BackingField: 1
-  panelAnimator: {fileID: 3481383400661967036}
+  _panelAnimator: {fileID: 3481383400661967036}
   inputField: {fileID: 3481383400446962389}
   createNicknameBtn: {fileID: 3481383400244792990}
 --- !u!222 &3481383400084828649

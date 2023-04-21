@@ -23,7 +23,6 @@ public class PlayerSpawnerController : NetworkBehaviour, IPlayerJoined, IPlayerL
 
     public override void Spawned()
     {
-        Debug.Log("spawned");
         if (Runner.IsServer)
         {
             foreach (var player in Runner.ActivePlayers)

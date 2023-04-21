@@ -21,7 +21,7 @@ public class localInputPoller : NetworkBehaviour, IBeforeUpdate
     private Vector2 _look => _lookAction.ReadValue<Vector2>();
 
 
-
+   
 
     public Vector2 GetLocalPlayerMoveInput()
     {

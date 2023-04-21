@@ -43,19 +43,7 @@ public class InputController : MonoBehaviour, IHandleinput
         _lookAction.Enable();
     }
 
-    private void Start()
-    {
-        _camRotation.Init();
-        _playerStateMachine.Init();
-        _animBlending.Init();
-    }
 
-    private void Update()
-    {
-        _playerStateMachine.UpdateStateMachine(Time.deltaTime);
-        _camRotation.UpdateFollowCam(Time.deltaTime);
-        _animBlending.UpdateAnimBlending(Time.deltaTime);
-    }
 
     private void OnDisable()
     {

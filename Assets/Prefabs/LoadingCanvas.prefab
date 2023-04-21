@@ -588,8 +588,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdc5b7b0d0104da448a500678a09db37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 4575967795352300718}
-  cancelBtn: {fileID: 3680247915086624647}
+  _animator: {fileID: 4575967795352300718}
+  _cancelBtn: {fileID: 3680247915086624647}
 --- !u!1 &4575967796719951564
 GameObject:
   m_ObjectHideFlags: 0

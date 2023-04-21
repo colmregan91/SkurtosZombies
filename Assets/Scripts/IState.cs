@@ -2,7 +2,7 @@
 {
     public void OnEnter();
 
-    public void OnUpdate(float DeltaTime );
+    public void OnUpdate();
 
     public void OnExit();
 }

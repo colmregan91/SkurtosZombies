@@ -13,7 +13,7 @@ public class IdleState : IState
         Debug.Log("Idle state exited");
     }
 
-    public void OnUpdate(float DeltaTime)
+    public void OnUpdate()
     {
         
 

@@ -6,81 +6,61 @@ using System;
 
 public class AnimationBlending : NetworkBehaviour
 {
-
-    private IHandleinput _input;
     public Animator _anim;
 
     [SerializeField] private float _acceleration = 1f;
     [SerializeField] private float _deccceleration = 1f;
-    private Vector3 _inputVector;
+    [Networked] public float CurrentXblendValue { get; private set; }
+    [Networked] public float CurrentYblendValue { get; private set; }
 
-    public float CurrentXblendValue { get; private set; }
-    public float CurrentYblendValue { get; private set; }
+    [Networked] public Vector2 locaInput { get; private set; }
+    private InputData inputdata;
 
-
-    private PlayerStateMachine _PlayerStateMachine;
-
-    void ONPlayerStateChanged(IState state)
+    public override void FixedUpdateNetwork()
     {
-        if (state is IdleState)
+        if (Runner.TryGetInputForPlayer<InputData>(Object.InputAuthority, out var input))
         {
-            _anim.SetBool(AnimStringUtils.s_MoveHash, false);
+            locaInput = input.MoveInput;
         }
-        if (state is MoveState)
-        {
-            _anim.SetBool(AnimStringUtils.s_MoveHash, true);
-        }
-
-    }
-    public void Init()
-    {
-        _input = GetComponentInParent<IHandleinput>();
-        _anim = GetComponent<Animator>();
-        _PlayerStateMachine = GetComponentInParent<PlayerStateMachine>();
-
-        _PlayerStateMachine.OnPlayerStateChanged += ONPlayerStateChanged;
+        inputdata.MoveInput = locaInput;
     }
 
-    private void OnDisable()
+    public override void Render()
     {
-        _PlayerStateMachine.OnPlayerStateChanged -= ONPlayerStateChanged;
+        UpdateAnimBlending(inputdata.MoveInput);
     }
-
-    // Update is called once per frame
-    public void UpdateAnimBlending(float DeltaTime)
+    public void UpdateAnimBlending(Vector2 input)
     {
 
-        _inputVector = _input.GetMoveInput();
-
-        if (_inputVector.x > 0.5f) // going right
+        if (input.x > 0.5f) // going right
         {
-            CurrentXblendValue += DeltaTime * _acceleration;
+            CurrentXblendValue += Runner.DeltaTime * _acceleration;
         }
-        if (_inputVector.x < -0.5f) // going left
+        if (input.x < -0.5f) // going left
         {
-            CurrentXblendValue -= DeltaTime * _acceleration;
+            CurrentXblendValue -= Runner.DeltaTime * _acceleration;
         }
 
 
 
-        if (_inputVector.y > 0.5f) // going forward
+        if (input.y > 0.5f) // going forward
         {
-            CurrentYblendValue += DeltaTime * _acceleration;
+            CurrentYblendValue += Runner.DeltaTime * _acceleration;
         }
 
-        if (_inputVector.y < -0.5f) //going back
+        if (input.y < -0.5f) //going back
         {
-            CurrentYblendValue -= DeltaTime * _acceleration;
+            CurrentYblendValue -= Runner.DeltaTime * _acceleration;
         }
 
-        if (_inputVector.y == 0f)
+        if (input.y == 0f)
         {
-            CurrentYblendValue = Mathf.Lerp(CurrentYblendValue, 0, DeltaTime * _deccceleration); //todo: Lerp this properly
+            CurrentYblendValue = Mathf.Lerp(CurrentYblendValue, 0, Runner.DeltaTime * _deccceleration); //todo: Lerp this properly
         }
 
-        if (_inputVector.x == 0f)
+        if (input.x == 0f)
         {
-            CurrentXblendValue = Mathf.Lerp(CurrentXblendValue, 0, DeltaTime * _deccceleration);//todo: Lerp this properly
+            CurrentXblendValue = Mathf.Lerp(CurrentXblendValue, 0, Runner.DeltaTime * _deccceleration);//todo: Lerp this properly
         }
 
 
@@ -89,7 +69,8 @@ public class AnimationBlending : NetworkBehaviour
 
         _anim.SetFloat(AnimStringUtils.s_BlendXHash, CurrentXblendValue);
         _anim.SetFloat(AnimStringUtils.s_BlendYHash, CurrentYblendValue);
-
+        _anim.SetBool(AnimStringUtils.s_MoveHash, input != Vector2.zero);
 
     }
 }
+

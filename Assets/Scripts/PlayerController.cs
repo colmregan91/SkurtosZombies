@@ -7,35 +7,38 @@ using Cinemachine;
 
 public class PlayerController : NetworkBehaviour, IHandleinput
 {
+
     [SerializeField] private Transform _camTransform;
     [SerializeField] private PlayerStateMachine _playerStateMachine;
-    [SerializeField] private CameraRotation _camRot;
-    [SerializeField] private AnimationBlending _animBlending;
 
     private const string LOCALNAME = "localPlayer";
     private const string REMOTENAME = "remotePlayer";
 
-    private Vector2 _moveInput;
-    private Vector2 _lookInput;
+    private Vector2 MoveInput;
+    private Vector2 LookInput;
 
+    private float deltaTime => Runner.DeltaTime;
+
+    public float DeltaTime()
+    {
+        return deltaTime;
+    }
     public Vector2 GetMoveInput()
     {
-        return _moveInput;
+        return MoveInput;
     }
 
     public Vector2 GetLookInput()
     {
-        return _lookInput;
+        return LookInput;
     }
 
     public override void Spawned()
     {
         _playerStateMachine.Init();
-        _camRot.Init();
-        _animBlending.Init();
-
         if (Runner.LocalPlayer == Object.HasInputAuthority)
         {
+           
             _camTransform.SetParent(null);
 
             gameObject.name = LOCALNAME;
@@ -43,44 +46,26 @@ public class PlayerController : NetworkBehaviour, IHandleinput
         }
         else
         {
-            disableComponents();
+            DisableComponents();
             gameObject.name = REMOTENAME;
         }
     }
 
-    private void disableComponents()
+    private void DisableComponents()
     {
-        _camRot.enabled = false;
         _camTransform.gameObject.SetActive(false);
     }
-
 
     public override void FixedUpdateNetwork()
     {
         if (Runner.TryGetInputForPlayer<InputData>(Object.InputAuthority, out var input))
         {
-            Debug.Log("here" + gameObject.name);
-            _moveInput = input.MoveInput;
-            _lookInput = input.LookInput;
+            MoveInput = input.MoveInput;
+            LookInput = input.LookInput;
 
-            _playerStateMachine.UpdateStateMachine(Runner.DeltaTime);
-        
-            //    CamRot.UpdateFollowCam(Runner.DeltaTime);
+            _playerStateMachine.UpdateStateMachine();
+
         }
 
-        _animBlending.UpdateAnimBlending(Runner.DeltaTime);
-        Debug.Log(_animBlending.CurrentXblendValue);
-        Debug.Log(_animBlending._anim.GetFloat(AnimStringUtils.s_BlendXHash));
-
-        //if (Runner.TryGetInputForPlayer<InputData>(Object.InputAuthority, out var input))
-        //{
-        //    Debug.Log("here" + gameObject.name);
-        //    MoveInput = input.MoveInput;
-        //    LookInput = input.LookInput;
-
-        //    PlayerStateMachine.UpdateStateMachine(Runner.DeltaTime);
-        //    CamRot.UpdateFollowCam(Runner.DeltaTime);
-        //  //  AnimBlending.UpdateAnimBlending(Runner.DeltaTime);
-        //}
     }
 }

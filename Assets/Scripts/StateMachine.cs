@@ -51,11 +51,11 @@ public class StateMachine
         // on state changed
     }
 
-    public void Tick(float DeltaTime)
+    public void Tick()
     {
         if (!CheckForTransition()) // todo : research how to set up via event subscription rather than checking conditions every frame
         {
-            CurrentState.OnUpdate(DeltaTime);
+            CurrentState.OnUpdate();
         }
     }
 

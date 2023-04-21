@@ -11,9 +11,8 @@ public class NetworkRunnerController : MonoBehaviour, INetworkRunnerCallbacks
     public event Action OnPlayerJoinedSuccessfully;
     [SerializeField] private NetworkRunner _networkRunnerPrefab;
 
-    private NetworkRunner _networkRunnerInstance;
+    public static NetworkRunner _networkRunnerInstance;
 
-     
     public void ShutDownRunner()
     {
         _networkRunnerInstance.Shutdown();

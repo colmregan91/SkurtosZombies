@@ -176,10 +176,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8072a68712d1544fad03baa221550c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CamTransform: {fileID: 3752842835800391268}
-  playerStateMachine: {fileID: 934987056}
-  camRotation: {fileID: 1586784646}
-  animBlending: {fileID: 1153008380}
+  _camTransform: {fileID: 3752842835800391268}
+  _playerStateMachine: {fileID: 934987056}
+  _camRotation: {fileID: 1586784646}
+  _animBlending: {fileID: 1153008380}
 --- !u!114 &934987056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,7 +237,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9955eb98e52c6674381d263df4d2f64a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationPower: 0.1
 --- !u!1 &8920758599203790967
 GameObject:
   m_ObjectHideFlags: 0
@@ -414,5 +413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ef9113225350714981abb1838fd8a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  _anim: {fileID: 0}
   _acceleration: 5
   _deccceleration: 10

@@ -31,25 +31,17 @@ public class MoveState : IState
         Debug.Log("Move state exited");
     }
 
-    private void MovePlayer(float DeltaTime)
+    private void MovePlayer()
     {
         _moveInputVector = _input.GetMoveInput();
-        _nextPosition = ((_playerTransform.forward * _moveInputVector.y * _speed) + (_playerTransform.right * _moveInputVector.x * _speed)) *  DeltaTime;
+        _nextPosition = ((_playerTransform.forward * _moveInputVector.y * _speed) + (_playerTransform.right * _moveInputVector.x * _speed)) * TimeUTils.instance.getRunnerDelta();
         _playerTransform.position += _nextPosition;
+        
     }
 
-    private void RotatePlayer()// follow transform is already moved using delta time in CameraRotation, so it is not needed here
-    {
-   
-        _playerTransform.rotation = Quaternion.Euler(0, _followTransform.rotation.eulerAngles.y, 0); 
 
-        // Reset the y rotation of the look transform
-        _followTransform.localEulerAngles = new Vector3(_followTransform.localEulerAngles.x, 0, 0); // todo: try clear this garbage
-    }
-
-    public void OnUpdate(float DeltaTime)
+    public void OnUpdate()
     {
-        MovePlayer(DeltaTime);
-        RotatePlayer();
+        MovePlayer();
     }
 }
